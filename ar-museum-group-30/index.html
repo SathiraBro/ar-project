@@ -1,0 +1,165 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <title>Group 30 - AR Mini Museum</title>
+
+    <!-- A-Frame -->
+    <script src="https://aframe.io/releases/1.6.0/aframe.min.js"></script>
+
+    <!-- AR.js -->
+    <script src="https://raw.githack.com/AR-js-org/AR.js/master/aframe/build/aframe-ar.js"></script>
+
+    <!-- Custom JavaScript Components -->
+    <script src="js/script.js"></script>
+
+    <link rel="stylesheet" href="css/style.css" />
+
+    <style>
+      body {
+        margin: 0;
+        overflow: hidden;
+      }
+    </style>
+  </head>
+
+  <body>
+    <!-- MUSEUM STATUS BANNER -->
+    <div id="status-banner" class="status-banner lost">
+      <strong id="status-title"> MUSEUM NOT FOUND! </strong>
+
+      <span id="status-message">
+        Please show the Hiro marker to your camera.
+      </span>
+    </div>
+
+    <!-- MAIN AR SCENE -->
+    <a-scene
+      embedded
+      arjs="sourceType: webcam; debugUIEnabled: false;"
+      vr-mode-ui="enabled: false"
+      renderer="antialias: true; colorManagement: true;"
+    >
+      <!-- LOAD 3D MODEL -->
+      <a-assets>
+        <a-asset-item
+          id="egyptianStatue"
+          src="assets/models/egyptian-statue.glb"
+        >
+        </a-asset-item>
+      </a-assets>
+
+      <!-- HIRO MARKER -->
+      <a-marker preset="hiro">
+        <!-- 1. MUSEUM PLATFORM -->
+        <a-box
+          position="0 0.04 0"
+          width="1.5"
+          height="0.08"
+          depth="1.5"
+          color="#795548"
+        >
+        </a-box>
+
+        <!-- 2. ANIMATED PILLAR -->
+        <a-entity
+          position="-0.45 0 -0.25"
+          animation="
+                    property: rotation;
+                    from: 0 0 0;
+                    to: 0 0 12;
+                    dur: 1800;
+                    dir: alternate;
+                    loop: true;
+                    easing: easeInOutSine"
+        >
+          <!-- Pillar body -->
+          <a-cylinder
+            position="0 0.43 0"
+            radius="0.13"
+            height="0.65"
+            color="#E5C79B"
+          >
+          </a-cylinder>
+
+          <!-- Pillar top -->
+          <a-cylinder
+            position="0 0.77 0"
+            radius="0.19"
+            height="0.07"
+            color="#B08D57"
+          >
+          </a-cylinder>
+        </a-entity>
+
+        <!-- 3. INTERACTIVE FLOATING GOLDEN SPHERE -->
+        <a-sphere
+          class="clickable"
+          museum-color-change
+          position="0.40 0.30 -0.25"
+          radius="0.20"
+          color="#D4AF37"
+          animation="
+                    property: position;
+                    from: 0.40 0.30 -0.25;
+                    to: 0.40 0.55 -0.25;
+                    dur: 1500;
+                    dir: alternate;
+                    loop: true;
+                    easing: easeInOutSine"
+        >
+        </a-sphere>
+
+        <!-- 4. MUSEUM MONUMENT -->
+        <a-cone
+          position="-0.35 0.40 0.35"
+          radius-bottom="0.22"
+          radius-top="0.02"
+          height="0.60"
+          color="#B87333"
+        >
+        </a-cone>
+
+        <!-- 5. INTERACTIVE EGYPTIAN STATUE -->
+        <a-entity
+          class="clickable"
+          museum-grow
+          gltf-model="#egyptianStatue"
+          position="0.45 0.08 0.20"
+          rotation="0 0 0"
+          scale="0.12 0.12 0.12"
+        >
+        </a-entity>
+
+        <!-- 6. MUSEUM INFORMATION LABEL -->
+        <a-text
+          value="GROUP 30 - MINI MUSEUM"
+          position="-0.60 0.105 0.60"
+          rotation="-90 0 0"
+          color="#FFFFFF"
+          width="2.5"
+          align="center"
+          scale="0.65 0.65 0.65"
+        >
+        </a-text>
+      </a-marker>
+
+      <!-- CAMERA AND INTERACTION CURSOR -->
+      <a-entity camera>
+        <a-entity
+          cursor="rayOrigin: entity; fuse: false"
+          raycaster="objects: .clickable; far: 10"
+          position="0 0 -1"
+          geometry="
+                    primitive: ring;
+                    radiusInner: 0.01;
+                    radiusOuter: 0.02"
+          material="color: white; shader: flat"
+        >
+        </a-entity>
+      </a-entity>
+    </a-scene>
+  </body>
+</html>
